@@ -17,8 +17,8 @@ import {
 import { parseBSDate, type ParsedBSDate } from "../converter/bsDateParser";
 
 type Props = {
-  value?: ParsedBSDate | null;
-  onChange?: (date: ParsedBSDate | null) => void;
+  value?: string | null;
+  onChange?: (date: string | null) => void;
   format?: string;
 };
 
@@ -29,18 +29,31 @@ export default function InputCalendar({
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
-  const [internalDate, setInternalDate] = useState<ParsedBSDate | null>(null);
+  const [internalDateStr, setInternalDateStr] = useState<string | null>(null);
+  const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
+  const selectedDateStr = value !== undefined ? value : internalDateStr;
+  const selectedDateObj = selectedDateStr
+    ? parseBSDate(selectedDateStr, separator)
+    : null;
+  if (selectedDateStr) {
+    console.log("My data", selectedDateStr);
+  }
 
-  const selectedDate = value !== undefined ? value : internalDate;
   const fieldWrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPos = useRef<number | null>(null);
-  const updateDate = (date: ParsedBSDate | null) => {
-    setInternalDate(date);
-    onChange?.(date);
-  };
-  const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
+  // const updateDate = (date: ParsedBSDate | null) => {
+  //   setInternalDate(date);
+  //   onChange?.(date);
+  // };
 
+  const updateDate = (dateObj: ParsedBSDate | null) => {
+    const formattedNepaliStr = dateObj
+      ? formatBSDateNepali(dateObj, format)
+      : null;
+    setInternalDateStr(formattedNepaliStr);
+    onChange?.(formattedNepaliStr);
+  };
   // convert type text in date object and update the date when user will edit the date or enter the date
   const handleDateBlur = () => {
     const result = parseBSDate(inputText, separator);
@@ -82,10 +95,10 @@ export default function InputCalendar({
 
   // Handle Focus
   const handleInputFocus = () => {
-    if (selectedDate && !inputText) {
-      const y = selectedDate.year;
-      const m = String(selectedDate.month).padStart(2, "0");
-      const d = String(selectedDate.day).padStart(2, "0");
+    if (selectedDateObj && !inputText) {
+      const y = selectedDateObj.year;
+      const m = String(selectedDateObj.month).padStart(2, "0");
+      const d = String(selectedDateObj.day).padStart(2, "0");
       setInputText(`${y}${separator}${m}${separator}${d}`);
     }
   };
@@ -95,7 +108,7 @@ export default function InputCalendar({
       <Box sx={{ m: "0px" }}>
         <Box ref={fieldWrapperRef}>
           <TextField
-            label={selectedDate ? "" : "मिति छान्‍नुहोस्  "}
+            label={selectedDateStr ? "" : "मिति छान्‍नुहोस्  "}
             size="small"
             sx={{
               " .MuiInputBase-input": {
@@ -103,11 +116,9 @@ export default function InputCalendar({
               },
             }}
             value={
-              inputText
-                ? toNepaliDigitsStr(inputText)
-                : selectedDate
-                  ? formatBSDateNepali(selectedDate, format)
-                  : ""
+              inputText ? toNepaliDigitsStr(inputText) : selectedDateStr || ""
+              // ? formatBSDateNepali(selectedDateStr, format)
+              // : ""
             }
             placeholder=" YYYY-MM-DD"
             onChange={handleInputChange}
@@ -140,7 +151,7 @@ export default function InputCalendar({
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
           <NepaliCalendar
-            selectDate={selectedDate}
+            selectDate={selectedDateObj}
             onSelectDate={(date) => {
               updateDate(date);
               setInputText("");
