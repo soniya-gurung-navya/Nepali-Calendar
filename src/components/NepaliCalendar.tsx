@@ -18,7 +18,7 @@ import type { ParsedBSDate } from "../converter/bsDateParser";
 // 2. Updated the Props type to receive the parent's selectedDate state
 type Props = {
   onSelectDate: (date: ParsedBSDate) => void;
-  selectDate: ParsedBSDate | null; // <-- ADD THIS
+  selectDate: ParsedBSDate | null;
 };
 
 const monthNames = [
@@ -173,6 +173,7 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
               {day && (
                 <Box
                   onClick={() => {
+                    if (day === null) return;
                     onSelectDate({ year, month, day });
                   }}
                   sx={{

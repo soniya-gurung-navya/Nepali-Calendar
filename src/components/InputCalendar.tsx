@@ -35,7 +35,6 @@ export default function InputCalendar({
   const fieldWrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPos = useRef<number | null>(null);
-
   const updateDate = (date: ParsedBSDate | null) => {
     setInternalDate(date);
     onChange?.(date);
@@ -44,7 +43,7 @@ export default function InputCalendar({
 
   // convert type text in date object and update the date when user will edit the date or enter the date
   const handleDateBlur = () => {
-    const result = parseBSDate(inputText);
+    const result = parseBSDate(inputText, separator);
     if (result) {
       updateDate(result);
     } else if (inputText) {
@@ -60,7 +59,7 @@ export default function InputCalendar({
     let value = toEnglishDigits(inputEl.value);
     value = value
       .split("")
-      .filter((char) => (char >= "0" && char <= "9") || char === "/")
+      .filter((char) => (char >= "0" && char <= "9") || char === separator)
       .join("");
     const beforeSepartor = value.length;
 

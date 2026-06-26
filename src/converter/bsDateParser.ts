@@ -10,9 +10,9 @@ const monthNames = [
 
 export type ParsedBSDate = { year: number; month: number; day: number };
 
-export function parseBSDate(text: string): ParsedBSDate | null {
+export function parseBSDate(text: string, separtor: string="-"): ParsedBSDate | null {
   const normalized = toEnglishDigits(text);
-  const parts = normalized.split("/");
+  const parts = normalized.split(separtor);
 
   if (parts.length !== 3 || parts[0].length !== 4) return null;
 
