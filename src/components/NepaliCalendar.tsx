@@ -10,31 +10,16 @@ import {
 } from "@mui/material";
 
 import { dateConfigMap } from "../constants/YearData";
-import { formatObj } from "../constants/NepaliDate";
+import { formatObj, monthNames } from "../constants/NepaliDate";
 import { getMonthStartWeekday } from "../converter/dateConverter";
 import { toNepaliDigits } from "../constants/NepaliDigits";
-import type { ParsedBSDate } from "../converter/bsDateParser";
+import type { ParsedBSDate } from "../converter/parseBSDate";
 
 // 2. Updated the Props type to receive the parent's selectedDate state
 type Props = {
   onSelectDate: (date: ParsedBSDate) => void;
   selectDate: ParsedBSDate | null;
 };
-
-const monthNames = [
-  "Baisakh",
-  "Jestha",
-  "Asar",
-  "Shrawan",
-  "Bhadra",
-  "Aswin",
-  "Kartik",
-  "Mangsir",
-  "Poush",
-  "Magh",
-  "Falgun",
-  "Chaitra",
-] as const;
 
 // 3. Destructure selectedDate prop here
 export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
@@ -50,10 +35,13 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
 
     return () => clearTimeout(timer);
   }, [selectDate]);
+
   const availableYears = Object.keys(dateConfigMap).map(Number);
+
   const daysInThisMonth =
     dateConfigMap[String(year)]?.[monthNames[month - 1]] ?? 30;
-  const startWeekday = getMonthStartWeekday(year, month); // 0=Sun
+
+  const startWeekday = getMonthStartWeekday(year, month);
 
   const goPrevMonth = () => {
     if (month === 1) {
@@ -76,8 +64,8 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
   const isNextDisabled = year === 2090 && month === 12;
 
   const cells = [
-    ...Array(startWeekday).fill(null),
-    ...Array.from({ length: daysInThisMonth }, (_, i) => i + 1),
+    ...Array(startWeekday).fill(null), //fill blank space after sunday of the start day.
+    ...Array.from({ length: daysInThisMonth }, (_, i) => i + 1), //generates the actual list of real day numbers to display
   ];
 
   return (

@@ -9,6 +9,7 @@ const englishDigitMap: Record<string, string> = {
   "५": "5", "६": "6", "७": "7", "८": "8", "९": "9",
 };
 
+
 export function toNepaliDigits(num: number, padLength: number = 0): string {
   const padded = padLength > 0 ? num.toString().padStart(padLength, "0") : num.toString();
   return padded

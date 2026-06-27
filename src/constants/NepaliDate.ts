@@ -5,6 +5,12 @@ export type BSDate = {
   weekday: number      
 }
 
+export const monthNames = [
+  "Baisakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Aswin",
+  "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra",
+] as const;
+
+
 export const formatObj = {
   day: {
     short: ['आइत', 'सोम', 'मंगल', 'बुध', 'बिहि', 'शुक्र', 'शनि'],
@@ -19,10 +25,6 @@ export const formatObj = {
   },
   date: ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'],
 }
-
-// // Anchor point: Baisakh 1, 2077 BS = April 13, 2020 AD
-// export const anchorBS: BSDate = { year: 2077, month: 1, date: 1, weekday: 1 }
-// export const anchorAD = new Date(2020, 3, 13)
 
 export const anchorBS: BSDate = { year: 2000, month: 1, date: 1, weekday: 1} 
 export const anchorAD = new Date(1943, 3, 14)

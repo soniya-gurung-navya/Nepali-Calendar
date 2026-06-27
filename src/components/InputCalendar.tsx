@@ -1,4 +1,3 @@
-// Hold confirmed date and user type date
 import {
   Box,
   IconButton,
@@ -14,14 +13,13 @@ import {
   toEnglishDigits,
   toNepaliDigitsStr,
 } from "../constants/NepaliDigits";
-import { parseBSDate, type ParsedBSDate } from "../converter/bsDateParser";
+import { parseBSDate, type ParsedBSDate } from "../converter/parseBSDate";
 
 type Props = {
   value?: string | null;
   onChange?: (date: string | null) => void;
-  format?: string;
+  format?: "YYYY-MM-DD" | "YYYY/MM/DD";
 };
-
 export default function InputCalendar({
   value,
   onChange,
@@ -30,7 +28,8 @@ export default function InputCalendar({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
   const [internalDateStr, setInternalDateStr] = useState<string | null>(null);
-  const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
+  // const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
+  const separator = format.includes("-") ? "-" : "/";
   const selectedDateStr = value !== undefined ? value : internalDateStr;
   const selectedDateObj = selectedDateStr
     ? parseBSDate(selectedDateStr, separator)
@@ -54,6 +53,7 @@ export default function InputCalendar({
     setInternalDateStr(formattedNepaliStr);
     onChange?.(formattedNepaliStr);
   };
+
   // convert type text in date object and update the date when user will edit the date or enter the date
   const handleDateBlur = () => {
     const result = parseBSDate(inputText, separator);
@@ -65,6 +65,7 @@ export default function InputCalendar({
     setInputText(""); // clear either way
   };
 
+  const allowed_separators = ["-", "/"];
   // handle change (/) function:
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputEl = e.target;
@@ -72,6 +73,7 @@ export default function InputCalendar({
     let value = toEnglishDigits(inputEl.value);
     value = value
       .split("")
+      .map((char) => (allowed_separators.includes(char) ? separator : char))
       .filter((char) => (char >= "0" && char <= "9") || char === separator)
       .join("");
     const beforeSepartor = value.length;
@@ -120,7 +122,7 @@ export default function InputCalendar({
               // ? formatBSDateNepali(selectedDateStr, format)
               // : ""
             }
-            placeholder=" YYYY-MM-DD"
+            placeholder={format}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onBlur={handleDateBlur}
