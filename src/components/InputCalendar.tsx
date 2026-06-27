@@ -34,9 +34,9 @@ export default function InputCalendar({
   const selectedDateObj = selectedDateStr
     ? parseBSDate(selectedDateStr, separator)
     : null;
-  if (selectedDateStr) {
-    console.log("My data", selectedDateStr);
-  }
+  // if (selectedDateStr) {
+  //   console.log("My data", selectedDateStr);
+  // }
 
   const fieldWrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
