@@ -2,11 +2,6 @@ import { dateConfigMap } from "../constants/YearData";
 import { toEnglishDigits } from "../constants/NepaliDigits"; // adjust path to match your folder
 import { monthNames } from "../constants/NepaliDate";
 
-// export const monthNames = [
-//   "Baisakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Aswin",
-//   "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra",
-// ] as const;
-
 export type ParsedBSDate = { year: number; month: number; day: number };
 
 export function parseBSDate(text: string, separtor: string="-"): ParsedBSDate | null {

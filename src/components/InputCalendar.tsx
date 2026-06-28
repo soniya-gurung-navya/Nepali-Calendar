@@ -20,31 +20,26 @@ type Props = {
   onChange?: (date: string | null) => void;
   format?: "YYYY-MM-DD" | "YYYY/MM/DD";
 };
+
 export default function InputCalendar({
   value,
   onChange,
-  format = "YYYY-MM-DD",
+  format = "YYYY/MM/DD",
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
   const [internalDateStr, setInternalDateStr] = useState<string | null>(null);
   // const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
+  const allowed_separators = ["-", "/"];
   const separator = format.includes("-") ? "-" : "/";
   const selectedDateStr = value !== undefined ? value : internalDateStr;
   const selectedDateObj = selectedDateStr
     ? parseBSDate(selectedDateStr, separator)
     : null;
-  // if (selectedDateStr) {
-  //   console.log("My data", selectedDateStr);
-  // }
 
   const fieldWrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPos = useRef<number | null>(null);
-  // const updateDate = (date: ParsedBSDate | null) => {
-  //   setInternalDate(date);
-  //   onChange?.(date);
-  // };
 
   const updateDate = (dateObj: ParsedBSDate | null) => {
     const formattedNepaliStr = dateObj
@@ -65,7 +60,6 @@ export default function InputCalendar({
     setInputText(""); // clear either way
   };
 
-  const allowed_separators = ["-", "/"];
   // handle change (/) function:
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputEl = e.target;

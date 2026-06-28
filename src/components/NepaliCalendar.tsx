@@ -70,7 +70,12 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
 
   return (
     <Card
-      sx={{ p: "20px", display: "flex", flexDirection: "column", gap: "10px" }}
+      sx={{
+        p: "10px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+      }}
     >
       <Box
         sx={{
