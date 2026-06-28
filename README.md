@@ -20,11 +20,18 @@ npm install react react-dom @mui/material @mui/x-date-pickers @emotion/react @em
 
 ```tsx
 import { useState } from "react";
-import { InputCalendar, type ParsedBSDate } from "@sonygrg/nepali-datepicker";
+import { InputCalendar } from "@sonygrg/nepali-datepicker";
 
 function App() {
-  const [date, setDate] = useState<ParsedBSDate | null>(null);
-  return <InputCalendar value={date} onChange={(value) => setDate(value)} />;
+  const [date, setDate] = useState<string | null>(null);
+
+  return (
+    <InputCalendar
+      value={date}
+      onChange={(value) => setDate(value)}
+      format="YYYY-MM-DD" // Accepts either "YYYY-MM-DD" or "YYYY/MM/DD"
+    />
+  );
 }
 
 export default App;
@@ -34,15 +41,14 @@ export default App;
 
 ### Props
 
-| Prop       | Type                                   | Description                                   |
-| ---------- | -------------------------------------- | --------------------------------------------- |
-| `value`    | `ParsedBSDate \| null`                 | The currently selected date (controlled mode) |
-| `onChange` | `(date: ParsedBSDate \| null) => void` | Called whenever the date changes              |
+| Prop       | Type                             | Description                                   |
+| ---------- | -------------------------------- | --------------------------------------------- |
+| `value`    | `string\| null`                  | The currently selected date (controlled mode) |
+| `onChange` | `(date: string \| null) => void` | Called whenever the date changes              |
+| `format`   | `"YYYY-MM-DD" \| "YYYY/MM/DD"`   | Format of the input and output date string    |
 
-`ParsedBSDate` is shaped like:
-\`\`\`ts
-{ year: number; month: number; day: number }
-\`\`\`
+[IMPORTANT]
+The format prop only accepts "YYYY-MM-DD" or "YYYY/MM/DD". Passing any other variations or custom formats will not work as expected.
 
 ## Features
 
