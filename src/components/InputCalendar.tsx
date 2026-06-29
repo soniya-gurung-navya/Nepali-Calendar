@@ -61,15 +61,41 @@ export default function InputCalendar({
   };
 
   // handle change (/) function:
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const inputEl = e.target;
+  //   let cursor = inputEl.selectionStart ?? 0;
+  //   let rawValue = inputEl.value || "";
+  //   let value = toEnglishDigits(rawValue);
+  //   value = value
+  //     .split("")
+  //     .map((char) => (allowed_separators.includes(char) ? separator : char))
+  //     .filter((char) => (char >= "0" && char <= "9") || char === separator)
+  //     .join("");
+  //   const beforeSepartor = value.length;
+
+  //   if (value.length === 4 && !value.includes(separator)) {
+  //     value += separator;
+  //   } else if (value.length === 7 && value.split(separator).length === 2) {
+  //     value += separator;
+  //   }
+  //   if (value.length > beforeSepartor && cursor === beforeSepartor) {
+  //     cursor += 1;
+  //   }
+  //   cursorPos.current = cursor;
+  //   setInputText(value.slice(0, 10));
+  // };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputEl = e.target;
-    let cursor = inputEl.selectionStart ?? 0;
-    let value = toEnglishDigits(inputEl.value);
+    const cursor = inputEl?.selectionStart ?? 0;
+    const rawValue = inputEl?.value || "";
+
+    let value = toEnglishDigits(rawValue);
     value = value
       .split("")
       .map((char) => (allowed_separators.includes(char) ? separator : char))
       .filter((char) => (char >= "0" && char <= "9") || char === separator)
       .join("");
+
     const beforeSepartor = value.length;
 
     if (value.length === 4 && !value.includes(separator)) {
@@ -78,9 +104,10 @@ export default function InputCalendar({
       value += separator;
     }
     if (value.length > beforeSepartor && cursor === beforeSepartor) {
-      cursor += 1;
+      cursorPos.current = cursor + 1;
+    } else {
+      cursorPos.current = cursor;
     }
-    cursorPos.current = cursor;
     setInputText(value.slice(0, 10));
   };
   useLayoutEffect(() => {
@@ -145,6 +172,7 @@ export default function InputCalendar({
           anchorEl={anchorEl}
           onClose={() => setAnchorEl(null)}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          transformOrigin={{ vertical: "top", horizontal: "left" }}
         >
           <NepaliCalendar
             selectDate={selectedDateObj}
