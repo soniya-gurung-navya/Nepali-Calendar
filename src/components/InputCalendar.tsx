@@ -31,8 +31,9 @@ export default function InputCalendar({
   const [internalDateStr, setInternalDateStr] = useState<string | null>(null);
   // const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
   const allowed_separators = ["-", "/"];
-  const separator = format.includes("-") ? "-" : "/";
-  const selectedDateStr = value !== undefined ? value : internalDateStr;
+  const separator = format?.includes("-") ? "-" : "/";
+  const selectedDateStr = value?.trim() ? value : internalDateStr;
+
   const selectedDateObj = selectedDateStr
     ? parseBSDate(selectedDateStr, separator)
     : null;
@@ -51,6 +52,10 @@ export default function InputCalendar({
 
   // convert type text in date object and update the date when user will edit the date or enter the date
   const handleDateBlur = () => {
+    if (!inputText) {
+      updateDate(null);
+      return;
+    }
     const result = parseBSDate(inputText, separator);
     if (result) {
       updateDate(result);

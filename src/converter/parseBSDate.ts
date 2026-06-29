@@ -4,7 +4,10 @@ import { monthNames } from "../constants/NepaliDate";
 
 export type ParsedBSDate = { year: number; month: number; day: number };
 
-export function parseBSDate(text: string, separtor: string="-"): ParsedBSDate | null {
+export function parseBSDate(text: string | null | undefined, separtor: string="-"): ParsedBSDate | null {
+  if(!text){
+    return null;
+  }
   const normalized = toEnglishDigits(text);
   const parts = normalized.split(separtor);
 

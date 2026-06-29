@@ -39,7 +39,7 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
   const availableYears = Object.keys(dateConfigMap).map(Number);
 
   const daysInThisMonth =
-    dateConfigMap[String(year)]?.[monthNames[month - 1]] ?? 30;
+    dateConfigMap[String(year)]?.[monthNames[month - 1]] ?? 0;
 
   const startWeekday = getMonthStartWeekday(year, month);
 
