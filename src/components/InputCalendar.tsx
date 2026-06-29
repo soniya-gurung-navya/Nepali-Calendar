@@ -71,14 +71,14 @@ export default function InputCalendar({
   //     .map((char) => (allowed_separators.includes(char) ? separator : char))
   //     .filter((char) => (char >= "0" && char <= "9") || char === separator)
   //     .join("");
-  //   const beforeSepartor = value.length;
+  //   const beforeSepartor = value?.length;
 
-  //   if (value.length === 4 && !value.includes(separator)) {
+  //   if (value?.length === 4 && !value.includes(separator)) {
   //     value += separator;
-  //   } else if (value.length === 7 && value.split(separator).length === 2) {
+  //   } else if (value?.length === 7 && value.split(separator)?.length === 2) {
   //     value += separator;
   //   }
-  //   if (value.length > beforeSepartor && cursor === beforeSepartor) {
+  //   if (value?.length > beforeSepartor && cursor === beforeSepartor) {
   //     cursor += 1;
   //   }
   //   cursorPos.current = cursor;
@@ -96,14 +96,14 @@ export default function InputCalendar({
       .filter((char) => (char >= "0" && char <= "9") || char === separator)
       .join("");
 
-    const beforeSepartor = value.length;
+    const beforeSepartor = value?.length;
 
-    if (value.length === 4 && !value.includes(separator)) {
+    if (value?.length === 4 && !value.includes(separator)) {
       value += separator;
-    } else if (value.length === 7 && value.split(separator).length === 2) {
+    } else if (value?.length === 7 && value.split(separator)?.length === 2) {
       value += separator;
     }
-    if (value.length > beforeSepartor && cursor === beforeSepartor) {
+    if (value?.length > beforeSepartor && cursor === beforeSepartor) {
       cursorPos.current = cursor + 1;
     } else {
       cursorPos.current = cursor;
