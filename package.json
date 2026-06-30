@@ -1,7 +1,7 @@
 {
   "name": "@sonygrg/nepali-datepicker",
   "private": false,
-  "version": "1.0.24",
+  "version": "1.0.25",
   "type": "module",
   "main": "./dist/nepali-datepicker.cjs.js",
   "module": "./dist/nepali-datepicker.es.js",
@@ -31,8 +31,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1"
   },
- 
- "devDependencies": {
+  "devDependencies": {
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "@mui/material": "^9.1.1",
