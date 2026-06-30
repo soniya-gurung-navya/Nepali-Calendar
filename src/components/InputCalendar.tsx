@@ -5,7 +5,7 @@ import {
   Popover,
   TextField,
 } from "@mui/material";
-import { CalendarIcon } from "@mui/x-date-pickers";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useLayoutEffect, useRef, useState } from "react";
 import NepaliCalendar from "./NepaliCalendar";
 import {
@@ -164,7 +164,7 @@ export default function InputCalendar({
                     <IconButton
                       onClick={() => setAnchorEl(fieldWrapperRef.current)}
                     >
-                      <CalendarIcon />
+                      <CalendarMonthIcon />
                     </IconButton>
                   </InputAdornment>
                 ),
