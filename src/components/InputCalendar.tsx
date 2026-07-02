@@ -11,7 +11,7 @@ import NepaliCalendar from "./NepaliCalendar";
 import {
   formatBSDateNepali,
   toEnglishDigits,
-  toNepaliDigitsStr,
+  // toNepaliDigitsStr,
 } from "../constants/NepaliDigits";
 import { parseBSDate, type ParsedBSDate } from "../converter/parseBSDate";
 
@@ -128,6 +128,8 @@ export default function InputCalendar({
       const m = String(selectedDateObj.month).padStart(2, "0");
       const d = String(selectedDateObj.day).padStart(2, "0");
       setInputText(`${y}${separator}${m}${separator}${d}`);
+      const combinedStr = `${y}${separator}${m}${separator}${d}`;
+      setInputText(toEnglishDigits(combinedStr));
     }
   };
 
@@ -144,7 +146,11 @@ export default function InputCalendar({
               },
             }}
             value={
-              inputText ? toNepaliDigitsStr(inputText) : selectedDateStr || ""
+              inputText
+                ? inputText
+                : selectedDateStr
+                  ? toEnglishDigits(selectedDateStr)
+                  : ""
               // ? formatBSDateNepali(selectedDateStr, format)
               // : ""
             }
