@@ -30,6 +30,7 @@ function App() {
       value={date}
       onChange={(value) => setDate(value)}
       format="YYYY-MM-DD" // Accepts either "YYYY-MM-DD" or "YYYY/MM/DD"
+      type="en" //Accepts either "en" or "ne"
     />
   );
 }
@@ -41,18 +42,22 @@ export default App;
 
 ### Props
 
-| Prop       | Type                             | Description                                   |
-| ---------- | -------------------------------- | --------------------------------------------- |
-| `value`    | `string\| null`                  | The currently selected date (controlled mode) |
-| `onChange` | `(date: string \| null) => void` | Called whenever the date changes              |
-| `format`   | `"YYYY-MM-DD" \| "YYYY/MM/DD"`   | Format of the input and output date string    |
+| Prop       | Type                             | Description                                                           |
+| ---------- | -------------------------------- | --------------------------------------------------------------------- |
+| `value`    | `string\| null`                  | The currently selected date (controlled mode)                         |
+| `onChange` | `(date: string \| null) => void` | Called whenever the date changes                                      |
+| `format`   | `"YYYY-MM-DD" \| "YYYY/MM/DD"`   | Format of the input and output date string                            |
+| `type`     | `"en" \| "ne"`                   | Determines how the date is displayed and typed inside the input field |
 
 [IMPORTANT]
 The format prop only accepts "YYYY-MM-DD" or "YYYY/MM/DD". Passing any other variations or custom formats will not work as expected.
 
+The type prop only accepts "ne" or "en".
+"en" formats as 2080/01/01 and "ne" formats as २०८०/०१/०१. (Note: The calendar dropdown popup always displays in native Nepali digits).
+
 ## Features
 
-- Type a Nepali date manually (e.g. `२०८३/०१/०१`), or pick it from a calendar grid
+- Type a Nepali date manually (e.g. `२०८३/०१/०१` for "ne" type and 2080/01/01 for "en" type), or pick it from a calendar grid
 - Displays dates in Nepali digits
 
 ## License
