@@ -30,15 +30,20 @@ export function toNepaliDigits(
 
 export function formatBSDateNepali(
   date: { year:number; month:number; day:number } | null,
-  format:string = "YYYY-MM-DD"
+  format:string = "YYYY-MM-DD",
+  type: "ne" | "en" = "en"
 ): string | null {
 
   if (!date) return null;
-
-  return format
-    .replace("YYYY", toNepaliDigits(date.year,4))
-    .replace("MM", toNepaliDigits(date.month,2))
-    .replace("DD", toNepaliDigits(date.day,2));
+  const yStr = date.year.toString().padStart(4, "0");
+   const mStr = date.month.toString().padStart(2, "0");
+    const dStr = date.day.toString().padStart(2, "0");
+ 
+    const englishFormatted = format.replace("YYYY", yStr)
+    .replace("MM", mStr)
+    .replace("DD", dStr)
+ 
+    return type === "ne" ? toNepaliDigitsStr(englishFormatted): englishFormatted
 }
 
 

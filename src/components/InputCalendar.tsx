@@ -5,12 +5,13 @@ import {
   Popover,
   TextField,
 } from "@mui/material";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import DateRangeIcon from "@mui/icons-material/DateRange";
 import { useLayoutEffect, useRef, useState } from "react";
 import NepaliCalendar from "./NepaliCalendar";
 import {
   formatBSDateNepali,
   toEnglishDigits,
+  toNepaliDigitsStr,
   // toNepaliDigitsStr,
 } from "../constants/NepaliDigits";
 import { parseBSDate, type ParsedBSDate } from "../converter/parseBSDate";
@@ -19,12 +20,14 @@ type Props = {
   value?: string | null;
   onChange?: (date: string | null) => void;
   format?: "YYYY-MM-DD" | "YYYY/MM/DD";
+  type?: "ne" | "en";
 };
 
 export default function InputCalendar({
   value,
   onChange,
-  format = "YYYY/MM/DD",
+  format = "YYYY-MM-DD",
+  type = "en",
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
@@ -33,18 +36,16 @@ export default function InputCalendar({
   const allowed_separators = ["-", "/"];
   const separator = format?.includes("-") ? "-" : "/";
   const selectedDateStr = value?.trim() ? value : internalDateStr;
-
   const selectedDateObj = selectedDateStr
-    ? parseBSDate(selectedDateStr, separator)
+    ? parseBSDate(toEnglishDigits(selectedDateStr), separator)
     : null;
-
   const fieldWrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPos = useRef<number | null>(null);
 
   const updateDate = (dateObj: ParsedBSDate | null) => {
     const formattedNepaliStr = dateObj
-      ? formatBSDateNepali(dateObj, format)
+      ? formatBSDateNepali(dateObj, format, type)
       : null;
     setInternalDateStr(formattedNepaliStr);
     onChange?.(formattedNepaliStr);
@@ -56,7 +57,7 @@ export default function InputCalendar({
       updateDate(null);
       return;
     }
-    const result = parseBSDate(inputText, separator);
+    const result = parseBSDate(toEnglishDigits(inputText), separator);
     if (result) {
       updateDate(result);
     } else if (inputText) {
@@ -65,30 +66,6 @@ export default function InputCalendar({
     setInputText(""); // clear either way
   };
 
-  // handle change (/) function:
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const inputEl = e.target;
-  //   let cursor = inputEl.selectionStart ?? 0;
-  //   let rawValue = inputEl.value || "";
-  //   let value = toEnglishDigits(rawValue);
-  //   value = value
-  //     .split("")
-  //     .map((char) => (allowed_separators.includes(char) ? separator : char))
-  //     .filter((char) => (char >= "0" && char <= "9") || char === separator)
-  //     .join("");
-  //   const beforeSepartor = value?.length;
-
-  //   if (value?.length === 4 && !value.includes(separator)) {
-  //     value += separator;
-  //   } else if (value?.length === 7 && value.split(separator)?.length === 2) {
-  //     value += separator;
-  //   }
-  //   if (value?.length > beforeSepartor && cursor === beforeSepartor) {
-  //     cursor += 1;
-  //   }
-  //   cursorPos.current = cursor;
-  //   setInputText(value.slice(0, 10));
-  // };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputEl = e.target;
     const cursor = inputEl?.selectionStart ?? 0;
@@ -113,7 +90,8 @@ export default function InputCalendar({
     } else {
       cursorPos.current = cursor;
     }
-    setInputText(value.slice(0, 10));
+    const localizedValue = type === "ne" ? toNepaliDigitsStr(value) : value;
+    setInputText(localizedValue.slice(0, 10));
   };
   useLayoutEffect(() => {
     if (inputRef.current && cursorPos.current !== null) {
@@ -129,7 +107,11 @@ export default function InputCalendar({
       const d = String(selectedDateObj.day).padStart(2, "0");
       setInputText(`${y}${separator}${m}${separator}${d}`);
       const combinedStr = `${y}${separator}${m}${separator}${d}`;
-      setInputText(toEnglishDigits(combinedStr));
+      const localizedStr =
+        type === "ne"
+          ? toNepaliDigitsStr(combinedStr)
+          : toEnglishDigits(combinedStr);
+      setInputText(localizedStr);
     }
   };
 
@@ -149,12 +131,14 @@ export default function InputCalendar({
               inputText
                 ? inputText
                 : selectedDateStr
-                  ? toEnglishDigits(selectedDateStr)
+                  ? type === "ne"
+                    ? toNepaliDigitsStr(selectedDateStr)
+                    : toEnglishDigits(selectedDateStr)
                   : ""
               // ? formatBSDateNepali(selectedDateStr, format)
               // : ""
             }
-            placeholder={format}
+            placeholder={type === "ne" ? toNepaliDigitsStr(format) : format}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onBlur={handleDateBlur}
@@ -170,7 +154,7 @@ export default function InputCalendar({
                     <IconButton
                       onClick={() => setAnchorEl(fieldWrapperRef.current)}
                     >
-                      <CalendarMonthIcon />
+                      <DateRangeIcon />
                     </IconButton>
                   </InputAdornment>
                 ),

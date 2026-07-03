@@ -1,15 +1,17 @@
 import { defineConfig } from "vite";
-import { resolve } from "path";
 import react from "@vitejs/plugin-react"; 
 import dts from "vite-plugin-dts";
 
-const root = resolve(__dirname, "src");
-
 export default defineConfig({
   plugins: [
-    react(), // Crucial: Translates your React components so Vite can build them
-    dts({ insertTypesEntry: true, include: ["src"] }),
+    react(), 
+    dts({ 
+      insertTypesEntry: true, 
+      include: ["src"],
+      exclude: ["src/App.tsx", "src/main.tsx", "src/vite-env.d.ts"],
+    }),
   ],
+  publicDir: false,
 
   server: {
     port: 5000,
@@ -17,30 +19,18 @@ export default defineConfig({
     host: "0.0.0.0",
   },
 
-  resolve: {
-    alias: {
-      components: resolve(root, "components"),
-      config: resolve(root, "config"),
-      constants: resolve(root, "constants"),
-      layout: resolve(root, "layout"),
-      pages: resolve(root, "pages"),
-      routes: resolve(root, "routes"),
-      store: resolve(root, "store"),
-      services: resolve(root, "services"),
-      utils: resolve(root, "utils"),
-      hooks: resolve(root, "hooks"),
-    },
-  },
-
   build: {
+    // Crucial for UI elements to prevent dynamic style splitting bugs
+    cssCodeSplit: false, 
     lib: {
-      entry: resolve(root, "index.ts"), // Make sure you have src/index.ts or src/index.tsx
+      // Clean modern alternative: Vite can parse direct strings safely!
+      entry: "src/index.ts", 
       name: "NepaliDatePicker",
       formats: ["es", "cjs"],
       fileName: (format) => `nepali-datepicker.${format}.js`,
     },
     rollupOptions: {
-      // Cross-version protection: Borrow these from the hosting project instead of packing them
+      // Excellent job listing react/jsx-runtime here!
       external: [
         "react",
         "react-dom",
@@ -49,12 +39,12 @@ export default defineConfig({
         "@mui/icons-material",
         "@emotion/react",
         "@emotion/styled",
-        "dayjs",
       ],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          "react/jsx-runtime": "jsxRuntime",
           "@mui/material": "MaterialUI",
           "@mui/icons-material": "MuiIconsMaterial",
           "@emotion/react": "EmotionReact",
@@ -62,7 +52,6 @@ export default defineConfig({
         },
       },
     },
-    sourcemap: true,
-    emptyOutDir: true,
+    sourcemap: false,
   },
 });
