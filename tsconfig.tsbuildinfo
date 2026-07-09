@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/index.ts","./src/main.tsx","./src/components/inputcalendar.tsx","./src/components/nepalicalendar.tsx","./src/constants/nepalidate.ts","./src/constants/nepalidigits.ts","./src/constants/yeardata.ts","./src/converter/dateconverter.ts","./src/converter/parsebsdate.ts"],"version":"6.0.3"}

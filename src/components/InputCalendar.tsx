@@ -180,6 +180,7 @@ export default function InputCalendar({
               setInputText("");
               setAnchorEl(null);
             }}
+            // minDate={minDate}
             minDate={minDate}
             maxDate={maxDate}
           />

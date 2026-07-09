@@ -11,7 +11,7 @@ import {
 
 import { dateConfigMap } from "../constants/YearData";
 import { formatObj, monthNames } from "../constants/NepaliDate";
-import { getMonthStartWeekday } from "../converter/dateConverter";
+import { getMonthStartWeekday, getTodayBS } from "../converter/dateConverter";
 import { toNepaliDigits } from "../constants/NepaliDigits";
 import type { ParsedBSDate } from "../converter/parseBSDate";
 
@@ -30,8 +30,9 @@ export default function NepaliCalendar({
   minDate,
   maxDate,
 }: Props) {
-  const [year, setYear] = useState(() => selectDate?.year ?? 2083);
-  const [month, setMonth] = useState(() => selectDate?.month ?? 1);
+  const todayBs = getTodayBS();
+  const [year, setYear] = useState(() => selectDate?.year ?? todayBs.year);
+  const [month, setMonth] = useState(() => selectDate?.month ?? todayBs.month);
 
   useEffect(() => {
     if (!selectDate) return;
@@ -83,6 +84,12 @@ export default function NepaliCalendar({
     month: number,
     day: number,
   ): boolean => {
+    if (todayBs) {
+      if (year < todayBs.year) return true;
+      if (month === todayBs.year && month < todayBs.month) return true;
+      if (day === todayBs.year && todayBs.month && day < todayBs.date)
+        return true;
+    }
     const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     if (minDate && dateStr < minDate) return true;
     if (maxDate && dateStr > maxDate) return true;
@@ -182,6 +189,11 @@ export default function NepaliCalendar({
             selectDate.month === month &&
             selectDate.year === year;
           const isDisabled = day ? isDateDisabled(year, month, day) : false;
+          const isToday =
+            todayBs &&
+            todayBs.date === day &&
+            todayBs.month === month &&
+            todayBs.year === year;
 
           return (
             <Box key={i}>
@@ -202,6 +214,8 @@ export default function NepaliCalendar({
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    border: isToday ? "1px solid black" : "none",
+                    boxSizing: "border-box",
                   }}
                 >
                   {toNepaliDigits(day)}
