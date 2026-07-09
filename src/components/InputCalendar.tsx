@@ -21,6 +21,8 @@ type Props = {
   onChange?: (date: string | null) => void;
   format?: "YYYY-MM-DD" | "YYYY/MM/DD";
   type?: "ne" | "en";
+  minDate?: string;
+  maxDate?: string;
 };
 
 export default function InputCalendar({
@@ -28,6 +30,8 @@ export default function InputCalendar({
   onChange,
   format = "YYYY-MM-DD",
   type = "en",
+  minDate,
+  maxDate,
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
@@ -176,6 +180,8 @@ export default function InputCalendar({
               setInputText("");
               setAnchorEl(null);
             }}
+            minDate={minDate}
+            maxDate={maxDate}
           />
         </Popover>
       </Box>

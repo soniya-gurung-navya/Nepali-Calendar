@@ -19,10 +19,17 @@ import type { ParsedBSDate } from "../converter/parseBSDate";
 type Props = {
   onSelectDate: (date: ParsedBSDate) => void;
   selectDate: ParsedBSDate | null;
+  minDate?: string;
+  maxDate?: string;
 };
 
 // 3. Destructure selectedDate prop here
-export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
+export default function NepaliCalendar({
+  onSelectDate,
+  selectDate,
+  minDate,
+  maxDate,
+}: Props) {
   const [year, setYear] = useState(() => selectDate?.year ?? 2083);
   const [month, setMonth] = useState(() => selectDate?.month ?? 1);
 
@@ -60,6 +67,8 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
       setMonth((m) => m + 1);
     }
   };
+  // ||(minDate && `${year}-${String(month).padStart(2, "0")}-01` <= minDate);
+
   const isPrevDisabled = year === 2000 && month === 1;
   const isNextDisabled = year === 2090 && month === 12;
 
@@ -68,13 +77,25 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
     ...Array.from({ length: daysInThisMonth }, (_, i) => i + 1), //generates the actual list of real day numbers to display
   ];
 
+  // For min and max Date
+  const isDateDisabled = (
+    year: number,
+    month: number,
+    day: number,
+  ): boolean => {
+    const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    if (minDate && dateStr < minDate) return true;
+    if (maxDate && dateStr > maxDate) return true;
+    return false;
+  };
+
   return (
     <Card
       sx={{
-        p: "10px",
+        p: "30px",
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
+        gap: "8px",
       }}
     >
       <Box
@@ -83,7 +104,7 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
           alignItems: "center",
           justifyContent: "center",
           gap: "4px",
-          mb: "8px",
+          mb: "2px",
         }}
       >
         <IconButton onClick={goPrevMonth} disabled={isPrevDisabled}>
@@ -148,7 +169,7 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
       >
         {formatObj.day.short.map((d) => (
           <Box key={d}>
-            <Typography variant="caption" sx={{ fontSize: "14px" }}>
+            <Typography variant="caption" sx={{ fontSize: "12px" }}>
               {d}
             </Typography>
           </Box>
@@ -160,19 +181,21 @@ export default function NepaliCalendar({ onSelectDate, selectDate }: Props) {
             selectDate.day === day &&
             selectDate.month === month &&
             selectDate.year === year;
+          const isDisabled = day ? isDateDisabled(year, month, day) : false;
 
           return (
             <Box key={i}>
               {day && (
                 <Box
                   onClick={() => {
-                    if (day === null) return;
+                    if (day === null || isDisabled) return;
                     onSelectDate({ year, month, day });
                   }}
                   sx={{
-                    cursor: "pointer",
+                    cursor: isDisabled ? "not-allowed" : "pointer",
                     bgcolor: isSelected ? "primary.main" : "transparent",
                     color: isSelected ? "#fff" : "text.primary",
+                    opacity: isDisabled ? 0.5 : 1,
                     borderRadius: "50%",
                     height: "32px",
                     width: "32px",
