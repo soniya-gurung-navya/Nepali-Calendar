@@ -70,7 +70,11 @@ export default function NepaliCalendar({
   };
   // ||(minDate && `${year}-${String(month).padStart(2, "0")}-01` <= minDate);
 
-  const isPrevDisabled = year === 2000 && month === 1;
+  const isPrevDisabled =
+    year === 2000 &&
+    month === 1 &&
+    year === todayBs.year &&
+    month === todayBs.month;
   const isNextDisabled = year === 2090 && month === 12;
 
   const cells = [
@@ -86,10 +90,15 @@ export default function NepaliCalendar({
   ): boolean => {
     if (todayBs) {
       if (year < todayBs.year) return true;
-      if (month === todayBs.year && month < todayBs.month) return true;
-      if (day === todayBs.year && todayBs.month && day < todayBs.date)
+      if (year === todayBs.year && month < todayBs.month) return true;
+      if (
+        year === todayBs.year &&
+        month === todayBs.month &&
+        day < todayBs.date
+      )
         return true;
     }
+
     const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     if (minDate && dateStr < minDate) return true;
     if (maxDate && dateStr > maxDate) return true;
