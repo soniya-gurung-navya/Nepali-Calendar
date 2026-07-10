@@ -21,6 +21,7 @@ type Props = {
   selectDate: ParsedBSDate | null;
   minDate?: string;
   maxDate?: string;
+  type?: "en" | "ne";
 };
 
 // 3. Destructure selectedDate prop here
@@ -29,6 +30,7 @@ export default function NepaliCalendar({
   selectDate,
   minDate,
   maxDate,
+  type = "en",
 }: Props) {
   const todayBs = getTodayBS();
   const [year, setYear] = useState(() => selectDate?.year ?? todayBs.year);
@@ -146,7 +148,7 @@ export default function NepaliCalendar({
         >
           {availableYears.map((y) => (
             <MenuItem key={y} value={y}>
-              {toNepaliDigits(y)}
+              {type === "ne" ? toNepaliDigits(y) : y}
             </MenuItem>
           ))}
         </Select>
@@ -165,7 +167,7 @@ export default function NepaliCalendar({
           sx={{ minWidth: 90 }}
           size="small"
         >
-          {formatObj.month.long.map((name, index) => (
+          {formatObj.month.long[type].map((name, index) => (
             <MenuItem key={name} value={index + 1}>
               {name}
             </MenuItem>
@@ -183,7 +185,7 @@ export default function NepaliCalendar({
           gap: 2,
         }}
       >
-        {formatObj.day.short.map((d) => (
+        {formatObj.day.short[type].map((d) => (
           <Box key={d}>
             <Typography variant="caption" sx={{ fontSize: "12px" }}>
               {d}
@@ -227,7 +229,7 @@ export default function NepaliCalendar({
                     boxSizing: "border-box",
                   }}
                 >
-                  {toNepaliDigits(day)}
+                  {type === "ne" ? toNepaliDigits(day) : day}
                 </Box>
               )}
             </Box>

@@ -21,6 +21,7 @@ type Props = {
   onChange?: (date: string | null) => void;
   format?: "YYYY-MM-DD" | "YYYY/MM/DD";
   type?: "ne" | "en";
+  placeholder?: string;
   minDate?: string;
   maxDate?: string;
 };
@@ -30,12 +31,14 @@ export default function InputCalendar({
   onChange,
   format = "YYYY-MM-DD",
   type = "en",
+  placeholder = "Select Date",
   minDate,
   maxDate,
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [inputText, setInputText] = useState("");
   const [internalDateStr, setInternalDateStr] = useState<string | null>(null);
+  const [focus, setfocus] = useState(false);
   // const separator = format.replace(/[A-Za-z]/g, "")[0] || "/";
   const allowed_separators = ["-", "/"];
   const separator = format?.includes("-") ? "-" : "/";
@@ -57,6 +60,7 @@ export default function InputCalendar({
 
   // convert type text in date object and update the date when user will edit the date or enter the date
   const handleDateBlur = () => {
+    setfocus(false);
     if (!inputText) {
       updateDate(null);
       return;
@@ -105,6 +109,7 @@ export default function InputCalendar({
 
   // Handle Focus
   const handleInputFocus = () => {
+    setfocus(true);
     if (selectedDateObj && !inputText) {
       const y = selectedDateObj.year;
       const m = String(selectedDateObj.month).padStart(2, "0");
@@ -124,7 +129,7 @@ export default function InputCalendar({
       <Box sx={{ m: "0px" }}>
         <Box ref={fieldWrapperRef}>
           <TextField
-            label={selectedDateStr ? "" : "मिति छान्‍नुहोस्  "}
+            // label={selectedDateStr ? "" : `${label}`}
             size="small"
             sx={{
               " .MuiInputBase-input": {
@@ -142,7 +147,13 @@ export default function InputCalendar({
               // ? formatBSDateNepali(selectedDateStr, format)
               // : ""
             }
-            placeholder={type === "ne" ? toNepaliDigitsStr(format) : format}
+            placeholder={
+              focus
+                ? type === "ne"
+                  ? toNepaliDigitsStr(format)
+                  : format
+                : placeholder
+            }
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onBlur={handleDateBlur}
@@ -174,6 +185,7 @@ export default function InputCalendar({
           transformOrigin={{ vertical: "top", horizontal: "left" }}
         >
           <NepaliCalendar
+            type={type}
             selectDate={selectedDateObj}
             onSelectDate={(date) => {
               updateDate(date);
