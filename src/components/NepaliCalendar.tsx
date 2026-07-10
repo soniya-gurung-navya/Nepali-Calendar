@@ -90,16 +90,16 @@ export default function NepaliCalendar({
     month: number,
     day: number,
   ): boolean => {
-    if (todayBs) {
-      if (year < todayBs.year) return true;
-      if (year === todayBs.year && month < todayBs.month) return true;
-      if (
-        year === todayBs.year &&
-        month === todayBs.month &&
-        day < todayBs.date
-      )
-        return true;
-    }
+    // if (todayBs) {
+    //   if (year < todayBs.year) return true;
+    //   if (year === todayBs.year && month < todayBs.month) return true;
+    //   if (
+    //     year === todayBs.year &&
+    //     month === todayBs.month &&
+    //     day < todayBs.date
+    //   )
+    //     return true;
+    // }
 
     const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     if (minDate && dateStr < minDate) return true;
