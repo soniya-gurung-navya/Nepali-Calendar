@@ -1,7 +1,7 @@
 {
   "name": "@sonygrg/nepali-datepicker",
   "private": false,
-  "version": "1.0.37",
+  "version": "1.0.38",
   "publishConfig": {
     "access": "public"
   },
