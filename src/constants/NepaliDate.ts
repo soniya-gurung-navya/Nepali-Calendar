@@ -6,7 +6,7 @@ export type BSDate = {
 }
 
 export const monthNames = [
-  "Baisakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Aswin",
+  "Baishakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Ashwin",
   "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra",
 ] as const;
 
@@ -30,7 +30,7 @@ export const formatObj = {
       'बैशाख', 'जेठ', 'असार', 'श्रावण', 'भाद्र', 'आश्विन',
       'कार्तिक', 'मंसिर', 'पौष', 'माघ', 'फाल्गुण', 'चैत्र',
     ],
-    en:["Baisakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Aswin",
+    en:["Baishakh", "Jestha", "Asar", "Shrawan", "Bhadra", "Ashwin",
 "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra",
 ]
     }
