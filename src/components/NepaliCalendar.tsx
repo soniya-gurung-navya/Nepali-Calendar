@@ -164,7 +164,7 @@ export default function NepaliCalendar({
               },
             },
           }}
-          sx={{ width: 120 ,minWidth:120,}}
+          sx={{ width: 125 }}
           size="small"
         >
           {formatObj.month.long[type].map((name, index) => (
