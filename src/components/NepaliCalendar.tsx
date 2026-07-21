@@ -144,7 +144,7 @@ export default function NepaliCalendar({
               },
             },
           }}
-          sx={{ minWidth: 70 }}
+          sx={{ minWidth: 90 }}
         >
           {availableYears.map((y) => (
             <MenuItem key={y} value={y}>
@@ -164,7 +164,7 @@ export default function NepaliCalendar({
               },
             },
           }}
-          sx={{minWidth:150, width: 150}}
+          sx={{width: 120,  minWidth: 120}}
           size="small"
         >
           {formatObj.month.long[type].map((name, index) => (
