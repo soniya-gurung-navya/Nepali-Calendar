@@ -7,13 +7,7 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import NepaliCalendar from "./NepaliCalendar";
 import {
   formatBSDateNepali,
@@ -32,16 +26,10 @@ type CustomProps = {
   minDate?: string;
   maxDate?: string;
 };
-export type InputCalendarRef = {
-  showPicker: () => void;
-  focus: () => void;
-  blur: () => void;
-};
-
 export type InputCalendarProps = CustomProps &
   Omit<TextFieldProps, keyof CustomProps>;
 
-const InputCalendar = forwardRef<InputCalendarRef, InputCalendarProps>(
+const InputCalendar = forwardRef<HTMLInputElement, InputCalendarProps>(
   (
     {
       value,
@@ -75,22 +63,13 @@ const InputCalendar = forwardRef<InputCalendarRef, InputCalendarProps>(
     const internalInputRef = useRef<HTMLInputElement>(null);
     const cursorPos = useRef<number | null>(null);
 
-    useImperativeHandle(ref, () => ({
-      showPicker: () => {
-        if (fieldWrapperRef.current) {
-          setAnchorEl(fieldWrapperRef.current);
-        }
-      },
-      focus: () => {
-        internalInputRef.current?.focus();
-      },
-      blur: () => {
-        internalInputRef.current?.blur();
-      },
-    }));
-
     const handleRef = (node: HTMLInputElement) => {
       internalInputRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+      }
     };
     const updateDate = (dateObj: ParsedBSDate | null) => {
       const formattedNepaliStr = dateObj
@@ -101,9 +80,7 @@ const InputCalendar = forwardRef<InputCalendarRef, InputCalendarProps>(
     };
 
     // convert type text in date object and update the date when user will edit the date or enter the date
-    const handleDateBlur = (
-      e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
+    const handleDateBlur = (e?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setfocus(false);
       if (e) {
         onBlur?.(e);
