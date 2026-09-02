@@ -92,7 +92,13 @@ const InputCalendar = forwardRef<HTMLInputElement, InputCalendarProps>(
       }
       const result = parseBSDate(toEnglishDigits(inputText), separator);
       if (result) {
-        updateDate(result);
+        const y = result.year;
+        const m = String(result.month).padStart(2, "0");
+        const d = String(result.day).padStart(2, "0");
+        const typedDate = `${y}-${m}-${d}`;
+        const isOutOfBounds = (maxDate && typedDate > maxDate) || (minDate && typedDate < minDate);
+        updateDate(isOutOfBounds ? null : result);
+        // updateDate(result);
       } else if (inputText) {
         updateDate(null);
       }
