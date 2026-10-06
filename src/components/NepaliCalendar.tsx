@@ -216,7 +216,7 @@ export default function NepaliCalendar({
                   }}
                   sx={{
                     cursor: isDisabled ? "not-allowed" : "pointer",
-                    bgcolor: isSelected ? "primary.main" : "transparent",
+                    bgcolor: isSelected ? "primary.main" : isToday ? "#E8EEFB" :  "transparent",
                     color: isSelected ? "#fff" : "text.primary",
                     opacity: isDisabled ? 0.5 : 1,
                     borderRadius: "50%",
